@@ -1,14 +1,24 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { Navigate } from 'react-router-dom';
+import { useAuth } from '@/lib/auth';
+import { Scale } from 'lucide-react';
 
-const Index = () => {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+export default function Index() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="animate-pulse-soft flex flex-col items-center gap-4">
+          <Scale className="h-16 w-16 text-primary" />
+          <p className="text-muted-foreground font-medium">Loading LexAdvisor...</p>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
 
-export default Index;
+  if (user) {
+    return <Navigate to="/chat" replace />;
+  }
+
+  return <Navigate to="/auth" replace />;
+}
